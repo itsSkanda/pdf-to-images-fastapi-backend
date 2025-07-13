@@ -28,12 +28,9 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # ✅ Serve the output directory at /output
 app.mount("/output", StaticFiles(directory=OUTPUT_DIR), name="output")
 
-# --- ADD THIS CONFIGURATION BLOCK ---
-# Get the base URL from an environment variable or default to local
-# Make sure to set BACKEND_BASE_URL=https://pdf-to-images-srmproject.onrender.com
-# when deploying to Render.com
-BASE_URL = os.getenv("BACKEND_BASE_URL", "http://localhost:8000") # Default to localhost
-# --- END ADDITION ---
+BASE_URL = os.getenv("BACKEND_BASE_URL") # No default, must be set via env var
+if not BASE_URL:
+    raise ValueError("BACKEND_BASE_URL environment variable is not set. This service requires it to run.")
 
 
 @app.post("/split-pdf")
